@@ -25,11 +25,25 @@ dim(df_nyc)
 
  The dataset contains the following variables: line, station_name, station longitute and latitude, the route that the train serves, entry and entry types, vending, and ada. The data cleaning process is that: firstly, read in the data from the directory and conduct a column-name-cleaning with the function clean_names; then, select the desired variables; lastly, recode the entry variable with yes equals to T and no to F. The dimension of the resulting dataset is `r dim(df_nyc)`. This is not a tidy data, because the route variables are spreadout to multiple columns rather than a single column.
 
-### How many distinct stations are there?
+#### How many distinct stations are there?
 ```{r}
 dim(distinct(df_nyc, station_name))[1]
 ```
 There are 356 distinct stations in the dataset.
 
-###
+#### How many stations are ADA compliant?
+```{r}
+df_nyc %>% 
+  filter(ada==T) %>% 
+  distinct(station_name) %>% 
+  dim()
+```
+There are 73 stations that are ADA compliant in the dataset.
+
+#### What proportion of station entrances / exits without vending allow entrance?
+```{r}
+dim(df_nyc %>% filter(vending=='NO'))[1]/dim(df_nyc)[1]
+```
+Among all entrancss/ exits  in the dataset, 9.7% of the entrance/exit do not have vending machines.
+
 
