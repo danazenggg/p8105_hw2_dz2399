@@ -1,0 +1,33 @@
+---
+title: "p8105_hw1_dz2399"
+author: "DZ"
+date: "September 29, 2018"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+## Problem 1
+
+### Read in the data according to instuctions
+```{r}
+df_nyc <- read_csv(file='./NYC_Transit_Subway_Entrance_And_Exit_Data.csv') %>%
+  janitor::clean_names() %>%
+  select(line, starts_with('station'),starts_with('route'),entry, vending,ada,entrance_type) %>% 
+  select(-station_location) %>% 
+  mutate(entry = recode (entry, 'YES' = T, 'NO'=F))
+
+dim(df_nyc)
+```
+
+ The dataset contains the following variables: line, station_name, station longitute and latitude, the route that the train serves, entry and entry types, vending, and ada. The data cleaning process is that: firstly, read in the data from the directory and conduct a column-name-cleaning with the function clean_names; then, select the desired variables; lastly, recode the entry variable with yes equals to T and no to F. The dimension of the resulting dataset is `r dim(df_nyc)`. This is not a tidy data, because the route variables are spreadout to multiple columns rather than a single column.
+
+### How many distinct stations are there?
+```{r}
+
+```
+
+
