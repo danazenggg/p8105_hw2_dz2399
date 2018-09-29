@@ -27,7 +27,9 @@ dim(df_nyc)
 
 ### How many distinct stations are there?
 ```{r}
-
+dim(distinct(df_nyc, station_name))[1]
 ```
+There are 356 distinct stations in the dataset.
 
+###
 
