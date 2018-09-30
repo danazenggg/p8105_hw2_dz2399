@@ -85,12 +85,14 @@ For each, omit rows without precipitation data and add a variable year. Next, co
 precip_2017 <- readxl::read_excel('./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx',
                                  sheet=3, range = 'A2:B15') %>% 
   mutate(year= rep(2017,13)) %>% 
-  filter(!Total=='NA',!Month=='NA')
+  filter(!Total=='NA') 
+  
+
 
 precip_2016 <- readxl::read_excel('./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx',
                                  sheet=4, range = 'A2:B15') %>% 
   mutate(year= rep(2016,13)) %>% 
-  filter(!Total=='NA',!Month=='NA')
+  filter(!Total=='NA')
 
 precip_full <- rbind(precip_2016,precip_2017) %>% 
   mutate(Month = as.factor(Month))
@@ -98,8 +100,8 @@ levels(precip_full$Month) <- month.name
 precip_full
 ```
 
-The resulting 2017 precipitation data has the dimension of `r dim(precip_2017)`, and the resulting 2016 precipitation data has the dimension of `r dim(precip_2016)`
-Be sure to note the number of observations in both resulting datasets, and give examples of key variables. For available data, what was the total precipitation in 2017? What was the median number of sports balls in a dumpster in 2016?
+The dimension of the Mr. Trash Wheel dataset is `r dim(df_tw)`and the dimension of the combined clean precipitation data for 2016 and 2017 dataset is `r dim(precip_full)`. Take the first line of the Mr. Trash Wheel sheet for example, we would interpret it as on May 16th, 2014, dumpster 1 collected 4.31 tons of trash that had the volume of 18 cubic yards. These trash were consisted of 1450 plastic bottles, 1820 polystyrene, 126000 cigarette butts, 72 glass bottles, 584 grocery bags, 1162 chip bags and 7 sports balls. For some reason, the variable home powered is empty in this dataset, but technically it means that Each ton of trash equates to on average 500 kilowatts of electricity.  An average household will use 30 kilowatts per day.
+For available data, the total precipitation in 2017 was `r precip_full[22,2]`. The median number of sports balls in a dumpster in 2016 is `r median(subset(df_tw, year==2016)$sports_balls) `
 
 ## Problem 3
 ```{r}
