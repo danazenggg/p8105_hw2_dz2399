@@ -8,13 +8,14 @@ output: github_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(p8105.datasets)
 ```
 
 ## Problem 1
 
 ### Read in the data according to instuctions
 ```{r}
-df_nyc <- read_csv(file='./NYC_Transit_Subway_Entrance_And_Exit_Data.csv') %>%
+df_nyc <- read_csv(file='./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv') %>%
   janitor::clean_names() %>%
   select(line, starts_with('station'),starts_with('route'),entry, vending,ada,entrance_type) %>% 
   select(-station_location) %>% 
@@ -46,4 +47,52 @@ dim(df_nyc %>% filter(vending=='NO'))[1]/dim(df_nyc)[1]
 ```
 Among all entrancss/ exits  in the dataset, 9.7% of the entrance/exit do not have vending machines.
 
+#### How many distinct stations serve the A train? Of the stations that serve the A train, how many are ADA compliant?
+```{r}
+df_nyc %>% 
+  gather(key=route_number, value=route_name,route1:route11) %>% 
+  filter(route_name=='A') %>% 
+  distinct(station_name) %>% 
+  dim()
+
+df_nyc %>% 
+  gather(key=route_number, value=route_name,route1:route11) %>% 
+  filter(route_name=='A',ada==T) %>% 
+  distinct(station_name) %>% 
+  dim()
+```
+Therefore, 56 stations serves the A train in the dataset, and of those 56 stations, 16 stations are APA compliant. 
+
+## Problem 2
+
+#### Read and clean the Mr. Trash Wheel sheet:
+
+* specify the sheet in the Excel file and to omit columns containing notes (using the range argument and  cell_cols() function)
+* use reasonable variable names
+* omit rows that do not include dumpster-specific data
+* rounds the number of sports balls to the nearest integer and converts the result to an integer variable (using  as.integer)
+
+```{r}
+df_tw <- readxl::read_excel('./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx',range='A2:N258') %>% 
+  janitor::clean_names() %>% 
+  filter(!dumpster=='NA') %>% 
+  mutate(sports_balls = as.integer(round(sports_balls,0)))
+```
+
+#### Read and clean precipitation data for 2016 and 2017. 
+For each, omit rows without precipitation data and add a variable year. Next, combine datasets and convert month to a character variable (the variable month.name is built into R and should be useful).
+```{r}
+parti_2017 <- readxl::read_excel('./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx',
+                                 sheet=3, range = 'A2:B15') %>% 
+  mutate(year= rep(2017,13)) %>% 
+  filter(!Total=='NA',!Month=='NA')
+
+parti_2016 <- readxl::read_excel('./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx',
+                                 sheet=4, range = 'A2:B15') %>% 
+  mutate(year= rep(2016,13)) %>% 
+  filter(!Total=='NA',!Month=='NA')
+
+parti_full <- rbind(parti_2016,parti_2017) %>% 
+  mutate(Month = recode(c(1:12) = month.name))
+```
 
