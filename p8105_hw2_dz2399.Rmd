@@ -82,17 +82,23 @@ df_tw <- readxl::read_excel('./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx'
 #### Read and clean precipitation data for 2016 and 2017. 
 For each, omit rows without precipitation data and add a variable year. Next, combine datasets and convert month to a character variable (the variable month.name is built into R and should be useful).
 ```{r}
-parti_2017 <- readxl::read_excel('./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx',
+precip_2017 <- readxl::read_excel('./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx',
                                  sheet=3, range = 'A2:B15') %>% 
   mutate(year= rep(2017,13)) %>% 
   filter(!Total=='NA',!Month=='NA')
 
-parti_2016 <- readxl::read_excel('./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx',
+precip_2016 <- readxl::read_excel('./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx',
                                  sheet=4, range = 'A2:B15') %>% 
   mutate(year= rep(2016,13)) %>% 
   filter(!Total=='NA',!Month=='NA')
 
-parti_full <- rbind(parti_2016,parti_2017) %>% 
-  mutate(Month = recode(c(1:12) = month.name))
+precip_full <- rbind(precip_2016,precip_2017) %>% 
+  mutate(Month = as.factor(Month))
+levels(precip_full$Month) <- month.name
+precip_full
 ```
 
+The resulting 2017 precipitation data has the dimension of `r dim(precip_2017)`, and the resulting 2016 precipitation data has the dimension of `r dim(precip_2016)`
+Be sure to note the number of observations in both resulting datasets, and give examples of key variables. For available data, what was the total precipitation in 2017? What was the median number of sports balls in a dumpster in 2016?
+
+The p
