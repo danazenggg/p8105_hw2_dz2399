@@ -45,11 +45,9 @@ There are 84 stations that are ADA compliant in the dataset.
 ```{r}
 a <- df_nyc %>% 
   filter(vending=='NO', entry==T) %>% 
-  distinct(line, station_name) %>% 
   nrow()
 b <- df_nyc %>% 
   filter(vending=='NO') %>% 
-  distinct(line, station_name) %>% 
   nrow()
 a/b
 ```
@@ -107,7 +105,7 @@ precip_full
 ```
 
 The dimension of the Mr. Trash Wheel dataset is `r dim(df_tw)`and the dimension of the combined clean precipitation data for 2016 and 2017 dataset is `r dim(precip_full)`. Take the first line of the Mr. Trash Wheel sheet for example, we would interpret it as on May 16th, 2014, dumpster 1 collected 4.31 tons of trash that had the volume of 18 cubic yards. These trash were consisted of 1450 plastic bottles, 1820 polystyrene, 126000 cigarette butts, 72 glass bottles, 584 grocery bags, 1162 chip bags and 7 sports balls. For some reason, the variable home powered is empty in this dataset, but technically it means that Each ton of trash equates to on average 500 kilowatts of electricity.  An average household will use 30 kilowatts per day.
-For available data, the total precipitation in 2017 was `r sum(subset(precip_full, year==2017)$Total)`. The median number of sports balls in a dumpster in 2016 is `r median(subset(df_tw, year==2016)$sports_balls) `
+For available data, the total precipitation in 2017 was `r sum(subset(precip_full, year==2017)$Total)`. The median number of sports balls in a dumpster in 2016 is `r median(subset(df_tw, year==2016)$sports_balls) `.
 
 ## Problem 3
 ```{r}
