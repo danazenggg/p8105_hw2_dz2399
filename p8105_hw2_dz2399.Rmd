@@ -67,7 +67,7 @@ df_nyc %>%
   distinct(station_name,line) %>% 
   dim()
 ```
-Therefore, 60 stations serves the A train in the dataset, and of those 56 stations, 17 stations are APA compliant. 
+Therefore, 60 stations serves the A train in the dataset, and of those 60 stations, 17 stations are APA compliant. 
 
 ## Problem 2
 
@@ -116,7 +116,7 @@ df_brfss <- brfss_smart2010 %>%
   select(-c(class,topic,question,sample_size,confidence_limit_low:geo_location)) %>%
   spread(key=response, value=data_value) %>% 
   janitor::clean_names() %>% 
-  mutate(proportion = (excellent+very_good)/(excellent+fair+good+poor+very_good) )
+  mutate(proportion = excellent + very_good)
 ```
 
 ####How many unique locations are included in the dataset? Is every state represented?  What state is observed the most?
@@ -132,7 +132,7 @@ df_brfss %>%
 sort(table(df_brfss$locationabbr),decreasing = T)[1]
 ```
 * 404 unique locaitons are included in the dataset
-* Since there are 51 states in total, every state is represented in the datset.
+* Since there are 51 states in total (50 states plus one DC), every state is represented in the datset.
 * The most observed state is New Jersy, and it has 146 observations.
 
 
@@ -155,10 +155,9 @@ ggplot(df_1, aes(x=excellent, y=..density..))+
 ```{r}
 df_2 <- df_brfss %>% 
   filter(locationabbr=='NY') %>% 
-  filter(locationdesc=='NY - New York County'|locationdesc=='NY - Queens County') %>% 
-  mutate(excellent_proportion = excellent/(excellent+fair+good+poor+very_good))
+  filter(locationdesc=='NY - New York County'|locationdesc=='NY - Queens County') 
 
-ggplot(df_2, aes(x=year, y=excellent_proportion,color=locationdesc))+
+ggplot(df_2, aes(x=year, y=excellent,color=locationdesc))+
   geom_point(alpha=0.7)+
   ggtitle('The scatterplot of the proportion of “Excellent” response values in New York County and Queens County from 2002 to 2010.')
 ```
