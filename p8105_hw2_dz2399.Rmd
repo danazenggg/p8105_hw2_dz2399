@@ -79,7 +79,7 @@ Therefore, 60 stations serves the A train in the dataset, and of those 56 statio
 * rounds the number of sports balls to the nearest integer and converts the result to an integer variable (using  as.integer)
 
 ```{r}
-df_tw <- readxl::read_excel('./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx',range='A2:N258') %>% 
+df_tw <- readxl::read_excel('./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx',range='A2:N338') %>% 
   janitor::clean_names() %>% 
   filter(!dumpster=='NA') %>% 
   mutate(sports_balls = as.integer(round(sports_balls,0)))
@@ -88,13 +88,13 @@ df_tw <- readxl::read_excel('./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx'
 #### Read and clean precipitation data for 2016 and 2017. 
 For each, omit rows without precipitation data and add a variable year. Next, combine datasets and convert month to a character variable (the variable month.name is built into R and should be useful).
 ```{r}
-precip_2017 <- readxl::read_excel('./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx', sheet=3, range = 'A2:B15') %>% 
+precip_2017 <- readxl::read_excel('./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx', sheet=4, range = 'A2:B15') %>% 
   mutate(year= rep(2017,13)) %>% 
   filter(!Total=='NA', !Month== 'NA') 
   
 
 
-precip_2016 <- readxl::read_excel('./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx',sheet=4, range = 'A2:B15') %>% 
+precip_2016 <- readxl::read_excel('./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx',sheet=5, range = 'A2:B15') %>% 
   mutate(year= rep(2016,13)) %>% 
   filter(!Total=='NA', !Month=='NA')
 
@@ -104,7 +104,7 @@ levels(precip_full$Month) <- month.name
 precip_full
 ```
 
-The dimension of the Mr. Trash Wheel dataset is `r dim(df_tw)`and the dimension of the combined clean precipitation data for 2016 and 2017 dataset is `r dim(precip_full)`. Take the first line of the Mr. Trash Wheel sheet for example, we would interpret it as on May 16th, 2014, dumpster 1 collected 4.31 tons of trash that had the volume of 18 cubic yards. These trash were consisted of 1450 plastic bottles, 1820 polystyrene, 126000 cigarette butts, 72 glass bottles, 584 grocery bags, 1162 chip bags and 7 sports balls. For some reason, the variable home powered is empty in this dataset, but technically it means that Each ton of trash equates to on average 500 kilowatts of electricity.  An average household will use 30 kilowatts per day.
+The dimension of the Mr. Trash Wheel dataset is `r dim(df_tw)`and the dimension of the combined clean precipitation data for 2016 and 2017 dataset is `r dim(precip_full)`. Take the first line of the Mr. Trash Wheel sheet for example, we would interpret it as on May 16th, 2014, dumpster 1 collected 4.31 tons of trash that had the volume of 18 cubic yards. These trash were consisted of 1450 plastic bottles, 1820 polystyrene, 126000 cigarette butts, 72 glass bottles, 584 grocery bags, 1162 chip bags and 7 sports balls. In addition, the variable home powered is that each ton of trash equates to on average 500 kilowatts of electricity.  An average household will use 30 kilowatts per day.
 For available data, the total precipitation in 2017 was `r sum(subset(precip_full, year==2017)$Total)`. The median number of sports balls in a dumpster in 2016 is `r median(subset(df_tw, year==2016)$sports_balls) `.
 
 ## Problem 3
